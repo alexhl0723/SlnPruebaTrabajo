@@ -1,0 +1,120 @@
+﻿@model Capa_Models.Trabajadore
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Creación trabajador</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label asp-for="TipoDocumento" class="control-label mb-0" style="min-width: 140px;"></label>
+                <select asp-for="TipoDocumento" class="form-control" asp-items="ViewBag.TiposDocumento" style="width: 100%;">
+                    <option value="">-- Selecciona Tipo de Documento --</option>
+                </select>
+                <span asp-validation-for="TipoDocumento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label asp-for="NumeroDocumento" class="control-label mb-0" style="min-width: 140px;"></label>
+                <input asp-for="NumeroDocumento" class="form-control" style="width: 100%;" />
+                <span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label asp-for="Nombres" class="control-label mb-0" style="min-width: 140px;"></label>
+                <input asp-for="Nombres" class="form-control" style="width: 100%;" />
+                <span asp-validation-for="Nombres" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label asp-for="Sexo" class="control-label mb-0" style="min-width: 140px;"></label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Sexo" value="F" id="sexoFemenino" />
+                        <label class="form-check-label" for="sexoFemenino">Femenino</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="Sexo" value="M" id="sexoMasculino" />
+                        <label class="form-check-label" for="sexoMasculino">Masculino</label>
+                    </div>
+                </div>
+                <span asp-validation-for="Sexo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label class="mb-0" style="min-width: 140px;">Departamento</label>
+                <select id="departamento" name="IdDepartamento" class="form-control" asp-items="ViewBag.IdDepartamento" style="width: 100%;">
+                    <option value="">-- Selecciona Departamento --</option>
+                </select>
+            </div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label class="mb-0" style="min-width: 140px;">Provincia</label>
+                <select id="provincia" name="IdProvincia" class="form-control" style="width: 100%;">
+                    <option value="">-- Selecciona Provincia --</option>
+                </select>
+            </div>
+
+            <div class="form-group d-flex align-items-center gap-3 mb-3">
+                <label class="mb-0" style="min-width: 140px;">Distrito</label>
+                <select id="distrito" name="IdDistrito" class="form-control" style="width: 100%;">
+                    <option value="">-- Selecciona Distrito --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success w-100" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.getElementById("departamento").addEventListener("change", function () {
+            const departamentoId = this.value;
+
+            fetch(`/Trabajadores/GetProvincias?idDepartamento=${departamentoId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const provinciaSelect = document.getElementById("provincia");
+                    provinciaSelect.innerHTML = '<option value="">-- Selecciona Provincia --</option>';
+                    document.getElementById("distrito").innerHTML = '<option value="">-- Selecciona Distrito --</option>';
+
+                    data.forEach(p => {
+                        provinciaSelect.innerHTML += `<option value="${p.id}">${p.nombreProvincia}</option>`;
+                    });
+                });
+        });
+
+        document.getElementById("provincia").addEventListener("change", function () {
+            const provinciaId = this.value;
+
+            fetch(`/Trabajadores/GetDistritos?idProvincia=${provinciaId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const distritoSelect = document.getElementById("distrito");
+                    distritoSelect.innerHTML = '<option value="">-- Selecciona Distrito --</option>';
+
+                    data.forEach(d => {
+                        distritoSelect.innerHTML += `<option value="${d.id}">${d.nombreDistrito}</option>`;
+                    });
+                });
+        });
+    </script>
+
+}
+

@@ -1,0 +1,65 @@
+﻿@model Capa_Models.Trabajadore
+
+@{
+    ViewData["Title"] = "Eliminar Trabajador";
+}
+
+<h1 class="text-danger">Eliminar Trabajador</h1>
+
+<h3 class="text-warning">¿Está seguro de que desea eliminar este registro?</h3>
+<hr />
+
+<div>
+    <h4>Datos del Trabajador</h4>
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TipoDocumento)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.TipoDocumento)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NumeroDocumento)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.NumeroDocumento)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nombres)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombres)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Sexo)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Sexo)</dd>
+
+        <dt class="col-sm-3">Departamento</dt>
+        <dd class="col-sm-9">@Model.IdDepartamentoNavigation?.NombreDepartamento</dd>
+
+        <dt class="col-sm-3">Provincia</dt>
+        <dd class="col-sm-9">@Model.IdProvinciaNavigation?.NombreProvincia</dd>
+
+        <dt class="col-sm-3">Distrito</dt>
+        <dd class="col-sm-9">@Model.IdDistritoNavigation?.NombreDistrito</dd>
+    </dl>
+
+    <!-- Botones -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal">
+        Eliminar
+    </button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</div>
+
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="confirmModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar al trabajador <strong>@Model.Nombres</strong>?
+                    Esta acción no se puede deshacer.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
